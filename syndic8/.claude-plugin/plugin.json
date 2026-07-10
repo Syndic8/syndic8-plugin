@@ -1,0 +1,8 @@
+{
+  "name": "syndic8",
+  "version": "0.1.0",
+  "description": "Syndic8 PIM for Claude — products, templates, preflight, and collections via the Syndic8 MCP server.",
+  "author": {
+    "name": "Syndic8"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "syndic8": {
+      "type": "http",
+      "url": "https://mcp.syndic8.io/mcp"
+    }
+  }
+}
