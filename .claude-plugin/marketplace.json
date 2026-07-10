@@ -7,7 +7,7 @@
     {
       "name": "syndic8",
       "source": "./syndic8",
-      "description": "Work with your Syndic8 PIM from Claude — query and update products, explore templates and field mappings, run preflight readiness checks, and manage collections, connected securely to your Syndic8 account via MCP."
+      "description": "Work with Syndic8, the product content syndication platform, from Claude — query and update products, explore templates and field mappings, run preflight readiness checks, and manage collections, connected securely to your Syndic8 account via MCP."
     }
   ]
 }

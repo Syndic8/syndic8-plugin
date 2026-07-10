@@ -1,7 +1,7 @@
 {
   "name": "syndic8",
   "version": "0.1.0",
-  "description": "Syndic8 PIM for Claude — products, templates, preflight, and collections via the Syndic8 MCP server.",
+  "description": "Syndic8 for Claude — product content syndication: products, templates, preflight readiness, and collections via the Syndic8 MCP server.",
   "author": {
     "name": "Syndic8"
   }

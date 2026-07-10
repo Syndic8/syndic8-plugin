@@ -1,6 +1,6 @@
 # Syndic8 for Claude
 
-Work with your Syndic8 PIM directly from Claude (Claude Code, Claude Desktop/Cowork): query and update products, explore templates and field mappings, run preflight readiness checks, and manage collections — connected securely to your Syndic8 account.
+Work with Syndic8 — the product content syndication platform — directly from Claude (Claude Code, Claude Desktop/Cowork): query and update products, explore templates and field mappings, run preflight readiness checks, and manage collections — connected securely to your Syndic8 account.
 
 **Access:** this plugin is available to Syndic8 subscribers. Your GitHub account (or organization) must be granted access to this repository by Syndic8 — contact your Syndic8 representative.
 

@@ -1,12 +1,12 @@
 ---
 name: syndic8-pim
 description: |
-  Work with the Syndic8 PIM — query and update product data, explore export/import templates and field mappings, run preflight readiness checks, manage collections, and look up inventory, pricing, and purchase orders. Use whenever the user mentions Syndic8, their PIM, product data, listings readiness, templates, valid values, preflight, or syndication to retail channels.
+  Work with Syndic8, the product content syndication platform — query and update product data, explore export/import templates and field mappings, run preflight readiness checks, manage collections, and look up inventory, pricing, and purchase orders. Use whenever the user mentions Syndic8, their PIM, product data, listings readiness, templates, valid values, preflight, or syndication to retail channels.
 ---
 
-# Syndic8 PIM
+# Syndic8
 
-Syndic8 is a product information management (PIM) and syndication platform: it centralizes product content and publishes it to retail channels (Amazon, Walmart, and many others). This skill covers working with your Syndic8 account through the **Syndic8 MCP server** bundled with this plugin.
+Syndic8 is a product content syndication platform, backed by a built-in PIM/DAM: it centralizes product content and publishes it to retail channels (Amazon, Walmart, and many others). This skill covers working with your Syndic8 account through the **Syndic8 MCP server** bundled with this plugin.
 
 ## Connection & auth
 
