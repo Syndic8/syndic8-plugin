@@ -17,11 +17,22 @@ Start a session by orienting:
 - `getUserPermissions` — what the user is allowed to do
 - `getMarketplaceList` — channels configured for the org
 
+## Platform model — key rules
+
+Full detail (with syntax and step-by-steps) in [references/platform-model.md](references/platform-model.md); the essentials:
+
+- **Hierarchy**: product = style → SKU = colorway → UPC = size (UPC is the unique identifier). Populate `STYLENUMBER` so sizes roll up under the style — image auto-matching and catalog rollup depend on it. Images match at the SKU (color) level and are shared by that color's sizes. Never model each size as its own SKU — it breaks rollup and image matching.
+- **Product types are a fixed, platform-wide taxonomy.** New types can't be created; unknown types are rejected ("Product type 'X' is not defined for this organization" — worded per-org, but the taxonomy is platform-wide). Exact strings matter (footwear is `Shoes`, not `Footwear`). Map source values to a valid type in the import configuration (valid-value / convert rule) — don't edit source data.
+- **Import-first loading.** Complete products (editable fields, media matching, pricing) come from the platform's import flows; `createProduct` makes an identity-only record — fine for a quick test, wrong for loading a catalog. Load in order: product attributes → pricing (matched by SKU/UPC) → marketing → images. The `skipEmpty` import setting defaults TRUE: blank inbound values don't overwrite saved values (set FALSE only for a deliberate clean-slate reload).
+- **Brand attribution** (multi-brand orgs): brand is a product-level assignment set at import, resolved through a matching-named brand organization. Include brand in the product import — don't bolt it on later via template defaults.
+- **Template inheritance**: a customer org's template is a child of a library parent (created via the Trading Partner screen → Field Mapping tab wizard). A child field only overrides the parent when explicitly flagged as an override — otherwise the parent wins at render even though the edit saves. After copying a parent, sweep inherited static defaults (they may carry another brand's values).
+- **Transformations live in the mapping, not the data** — `FUNC:VALIDVALUE`, `FUNC:IF_THEN`, `FUNC:REFERENCETABLE`, `FUNC:CONCAT`, `FUNC:CASE`, `FUNC:GETPRICING` (syntax in the reference). Prefer a mapping rule over rewriting catalog data.
+
 ## Product data
 
 - Always call `describeProductFields` before building filters — field names are org-specific. The same applies to `describeInventoryFields`, `describePricingFields`, `describePurchaseOrderFields` for those domains.
 - `queryProducts` for records; `queryProductAggregate` for counts/rollups (prefer aggregates for "how many" questions — cheaper and faster).
-- `createProduct` to add products; `diagnoseField` when a field's value or mapping looks wrong.
+- `createProduct` to add a quick test/placeholder product (identity-only — catalogs load via imports, see Platform model); `diagnoseField` when a field's value or mapping looks wrong.
 
 ### Updating products safely
 
@@ -39,8 +50,10 @@ Templates define how product data maps to a channel's requirements.
 
 ## Readiness (preflight)
 
-- `runPreflight` checks products against a channel template's requirements and reports errors/warnings per field.
+- Scope `runPreflight` to a collection for meaningful results — whole-catalog runs bury the signal. It checks products against a channel template's requirements and reports errors/warnings per field.
 - `runImagePreflight` does the same for image requirements.
+- Read the gap report as three buckets: required-missing (blocking), recommended (quality), invalid-values (present but not channel-accepted).
+- Use `diagnoseField` on any flagged field to see whether the issue is the mapping, the required-config, or source-field population — fix at that layer, then re-run to green.
 - Summarize results as: ready count, blocked count, top failing fields, and suggested fixes.
 
 ## Collections
