@@ -43,6 +43,17 @@ Complete, fully-functional products — editable fields, media auto-matching, pr
 
 If a customer asks why a re-import "didn't clear" a field: `skipEmpty` is almost always the answer.
 
+**A field's `defaultValue` fires only when its mapped source cell is blank — it never overrides a
+populated value.** A field can carry both a source-column mapping and a default at the same time;
+if the mapped cell has a value, that value is used verbatim regardless of the default. This matters
+most on fixed-taxonomy fields (e.g. product type): a template can have a perfectly valid default set,
+but if it's *also* mapped to a source column full of the customer's own category labels, every row
+imports with the customer's label — and an unrecognized one fails validation even though the
+"correct" default was right there. Fix it in the mapping: either unmap the source column (let the
+default apply uniformly), or add a valid-value / reference-table convert rule to translate the
+customer's vocabulary to the fixed taxonomy per row — a default alone can't do that translation,
+it's all-or-nothing, not a per-value lookup.
+
 ## Brand attribution (multi-brand organizations)
 
 In a house-of-brands setup, a product's **brand is a product-level assignment set at import time** — it resolves through a brand organization with a matching name.
