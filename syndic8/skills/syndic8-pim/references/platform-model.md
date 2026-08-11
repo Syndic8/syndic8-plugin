@@ -102,3 +102,12 @@ A repeatable readiness loop:
 2. **Read the gap report in three buckets:** required-missing (blocking), recommended (quality), and invalid-values (data present but not channel-accepted).
 3. **`diagnoseField` on any flagged field** to determine which layer is at fault: the mapping (transformation rule wrong or missing), the required-config (field required/valid-value setup), or source-field population (the product data itself is blank or wrong).
 4. **Fix at the right layer, then re-run** preflight until green. Mapping problems get mapping fixes; data problems get import fixes — don't paper over a mapping bug with a data edit (or vice versa).
+
+## User roles & permissions
+
+MCP tool calls run as a specific user and are bound by that user's **role on the organization being queried** — the same permission system that gates the UI, not a separate MCP-level allowlist. A tool being callable at all doesn't mean the calling user's role on a given org grants the function behind it.
+
+- **A permission denial names the specific function it needs** (e.g. "Permission denied: 'Allowed Values' (Read) required"). Treat that as the actual diagnosis, not a generic auth failure — it points at exactly which role function is missing.
+- **Roles are assigned per (user, organization)**, not globally per user. The same person can legitimately hold a full "Admin"-equivalent role on one org and a lower "Operations"/"User"-equivalent role on another — that's normal, not a bug. A newly created or promoted-into org can default a user to a lower role than they hold elsewhere; don't assume parity carries over.
+- **When a call fails unexpectedly, check the role assignment before assuming a platform or config bug.** Org-level permission flags returned by some org-detail endpoints are often a derived, read-only view of what the current role grants — they don't explain *why*, and patching them directly may appear to succeed without changing the underlying access. The actual fix is correcting which role the user holds on that org.
+- **Treat role reassignment as a sensitive, deliberate action** — read the current assignment first, change only what's needed, and verify by re-reading afterward rather than assuming a write succeeded.
