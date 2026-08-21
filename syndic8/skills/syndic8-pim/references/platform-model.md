@@ -63,17 +63,91 @@ In a house-of-brands setup, a product's **brand is a product-level assignment se
 
 ## Templates and inheritance
 
-Templates are parent/child:
+Templates form an **inheritance chain**, resolved fresh on every export. Understanding it is the
+difference between a mapping change that takes effect and one that silently does nothing.
 
-- **Library parent templates** live with the destination/channel and encode the channel's requirements.
-- A customer org's template is a **child** created from the parent. In the app: **Trading Partner screen → Field Mapping tab → "Create new manually"** wizard — pick the **Parent Template** and an **Inheritance Mode**, then **"Copy Parent"** performs the creation.
-  - **"Field Mappings Only"** — the child inherits field mappings; other parent changes don't flow down.
+### The chain
+
+- **Library parent templates** live with the destination/channel and encode the channel's
+  requirements — every field, its mapping, defaults and conditions.
+- A customer org's template is a **child** of one. In the app: **Trading Partner screen → Field
+  Mapping tab → "Create new manually"** — pick the **Parent Template** and an **Inheritance
+  Mode**, then **"Copy Parent"**.
+  - **"Field Mappings Only"** — the child inherits field mappings; other parent changes don't
+    flow down.
   - **"All Changes"** — the child tracks all parent changes.
 
-Two behaviors that surprise people:
+**Depth is unlimited.** A child's parent may itself have a parent, and so on — child → parent →
+grandparent → beyond. The chain is walked until a template has no parent, with a guard that stops
+a template naming itself. So a customer can hold their own base template of shared, pinned
+decisions (brand voice, price rules, image slots) and give each product category a small child
+that overrides only what differs. Use depth where it removes duplication; every extra level is
+one more place someone has to look.
 
-1. **Child edits only take effect when flagged as a parent override.** A child field overrides the parent only when it is explicitly marked as an override — otherwise the parent's definition wins at render time *even though the child edit saves without error*. If an edit "saves but doesn't stick" in output, check the override flag before anything else. `compareTemplates` helps show where child and parent diverge.
-2. **Sweep inherited static defaults after copying a parent.** Parent templates can carry static default values from prior use (including another brand's values — brand names, contact info, defaults). Review every inherited static default in a new child template before first export.
+### How a parent name resolves — four levels, most specific wins
+
+A parent is referenced **by name**, and that name is looked up in a fixed order, stopping at the
+first org that has it:
+
+1. the **customer org** itself
+2. the **destination/channel** org
+3. the **parent org / firm**
+4. **Syndic8 global**
+
+This is what makes shared templates practical: Syndic8 publishes a global template, and any
+customer, firm or channel can override it *for themselves* by creating one with the same name at
+their own level. Nothing else has to change — the next export picks up the nearer one. It also
+means a name collision at a nearer level silently shadows the global, so keep names deliberate.
+
+### Which definition wins, field by field
+
+For each field in the child, on every export:
+
+| Child field | What exports |
+|---|---|
+| marked as a **parent override** | the child's own definition |
+| not marked, and the parent has a field of the same name | **the parent's definition** |
+| not marked, and the parent has no such field | the child's definition |
+
+Two consequences worth internalising:
+
+1. **A child edit only takes effect when the field is flagged as a parent override.** Otherwise
+   the parent's definition wins at export *even though the child edit saved without error*. If a
+   mapping change "saves but doesn't stick" in output, check the override flag before anything
+   else. `compareTemplates` shows where child and parent diverge.
+2. **The override flag is also a pin.** An overridden field is immune to later parent changes.
+   That is the mechanism for "inherit improvements, but never let this one field move" — it is
+   not just a way to change a mapping.
+
+### Parent-driven field order
+
+A parent can additionally assert **its own field list and order** over the child's, so the child
+contributes only its overrides and the output column order is governed centrally. This is the
+stronger form of inheritance: use it when the channel's column order is fixed and children should
+not be able to reorder or omit columns.
+
+There is also a separate **client forced override** layer, applied after the chain is walked, for
+cases where one customer's template must win regardless of the hierarchy.
+
+### Keeping templates in step with the matrix
+
+A template can be flagged to **sync with a matrix view**. A scheduled background job then
+reconciles flagged templates against their view on a fixed interval and records the last sync
+time on the template. Because the matrix view for a category defines which fields that category
+has, this is the supported way to let a template's field list follow the category definition
+instead of being hand-maintained.
+
+### Practical guidance
+
+- **Keep children thin.** A healthy child carries the fields it needs plus its genuine overrides.
+  A child that duplicates the parent's full mapping set has stopped inheriting in practice: every
+  field either shadows the parent or is dead weight, and parent improvements stop reaching it.
+- **Sweep inherited static defaults after copying a parent.** Parent templates can carry static
+  defaults from prior use — including another brand's values (brand names, contact details).
+  Review every inherited static default in a new child before its first export.
+- **Detaching a child from its parent** makes it fully self-contained: nothing is inherited and
+  nothing propagates. That is occasionally what you want, but it is a decision, not a default —
+  a detached child will not pick up channel requirement changes.
 
 ## Transformations: the mapping engine's muscle
 
