@@ -129,13 +129,25 @@ not be able to reorder or omit columns.
 There is also a separate **client forced override** layer, applied after the chain is walked, for
 cases where one customer's template must win regardless of the hierarchy.
 
-### Keeping templates in step with the matrix
+### Keeping the matrix in step with a template
 
-A template can be flagged to **sync with a matrix view**. A scheduled background job then
-reconciles flagged templates against their view on a fixed interval and records the last sync
-time on the template. Because the matrix view for a category defines which fields that category
-has, this is the supported way to let a template's field list follow the category definition
-instead of being hand-maintained.
+A template can be flagged to **sync with a matrix view**, and it is worth being precise about
+which way that sync runs: **the template is the source and the matrix view is the target.** The
+sync walks the template's field list and writes it into the category's matrix view — field
+names, requirement flags, and the definitions and examples the view carries per field. It does
+not read the matrix and reshape the template.
+
+That direction is the useful one in practice. The template is where a channel's real
+requirements land — a retailer's own schema, imported as a seed file and mapped — so syncing
+pushes those requirements into the category definition every product in that category is then
+scored against. A template's field list is not driven by the matrix; it is driven by the
+channel.
+
+**The sync is an action, not a background schedule.** It runs when it is invoked — as part of
+creating a template for a new product type from a retailer's seed file, or by asking for the
+category's matrix to be brought in line with a template. The template records the time it last
+synced, which is what to check when a matrix view looks out of date: an old or empty stamp means
+the sync has not been run for that template, not that it ran and found nothing.
 
 ### Practical guidance
 
