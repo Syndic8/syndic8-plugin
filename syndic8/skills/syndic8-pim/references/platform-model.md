@@ -73,9 +73,16 @@ difference between a mapping change that takes effect and one that silently does
 - A customer org's template is a **child** of one. In the app: **Trading Partner screen → Field
   Mapping tab → "Create new manually"** — pick the **Parent Template** and an **Inheritance
   Mode**, then **"Copy Parent"**.
-  - **"Field Mappings Only"** — the child inherits field mappings; other parent changes don't
-    flow down.
-  - **"All Changes"** — the child tracks all parent changes.
+  - **"All Changes"** (the default) — the child keeps **its own field list**. For each field it
+    has, an overridden field keeps the child's definition and a non-overridden one takes the
+    parent's. Fields the child added that the parent doesn't have are left alone.
+  - **"Field Mappings Only"** — the **parent's field list and order govern** the output. The
+    child contributes only the fields it has explicitly overridden; **a field the child added
+    that the parent doesn't have is dropped from the export.**
+
+  Read those names carefully — they are easy to get backwards. "Field Mappings Only" is the
+  *stricter* mode: it hands control of which columns exist, and in what order, to the parent.
+  If your child adds any field of its own, choose **"All Changes"**.
 
 **Depth is unlimited.** A child's parent may itself have a parent, and so on — child → parent →
 grandparent → beyond. The chain is walked until a template has no parent, with a guard that stops
@@ -115,6 +122,14 @@ Two consequences worth internalising:
    the parent's definition wins at export *even though the child edit saved without error*. If a
    mapping change "saves but doesn't stick" in output, check the override flag before anything
    else. `compareTemplates` shows where child and parent diverge.
+
+   This is worth taking seriously rather than filing away, because it is what a parent's
+   definition *winning* actually means: the parent's **mapping** wins too. A library parent's
+   mappings point at the source columns the library assumes, so a child that inherits them
+   unflagged can export a column that is **completely empty** — the field looks configured, the
+   export succeeds, and the data is gone. **Attach a parent, then export and check the file
+   before trusting it.** If columns came back blank, flag the affected fields as parent
+   overrides and re-export.
 2. **The override flag is also a pin.** An overridden field is immune to later parent changes.
    That is the mechanism for "inherit improvements, but never let this one field move" — it is
    not just a way to change a mapping.
