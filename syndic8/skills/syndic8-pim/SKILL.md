@@ -32,7 +32,17 @@ Full detail (with syntax and step-by-steps) in [references/platform-model.md](re
 
 - Always call `describeProductFields` before building filters — field names are org-specific. The same applies to `describeInventoryFields`, `describePricingFields`, `describePurchaseOrderFields` for those domains.
 - `queryProducts` for records; `queryProductAggregate` for counts/rollups (prefer aggregates for "how many" questions — cheaper and faster).
-- `createProduct` to add a quick test/placeholder product (identity-only — catalogs load via imports, see Platform model); `diagnoseField` when a field's value or mapping looks wrong.
+- `listProductTypes` for the valid product-type taxonomy and `listAvailableFields` for the org's field catalog — use these to discover valid values, never a trial `createProduct`.
+- `createProduct` to add a quick test/placeholder product (identity-only — catalogs load via imports, see Platform model); `createProducts` for a small batch of the same; `diagnoseField` when a field's value or mapping looks wrong.
+- `getFieldConfig` for one field's configuration; `queryMatrix` for the per-product-type field model (which fields a category requires/recommends); `getServerInfo` to confirm what server/version you're talking to.
+
+## Inventory, pricing & purchase orders
+
+Each domain pairs a describe tool with query tools — describe first, then query:
+
+- **Inventory**: `describeInventoryFields` → `queryInventory` (records) / `queryInventoryAggregate` (totals by location, SKU, etc.).
+- **Pricing**: `describePricingFields` → `queryPricing` / `queryPricingAggregate`. Pricing rows carry MSRP / MAP / wholesale cost per currency; channel-specific price overrides are separate rows scoped to a destination.
+- **Purchase orders** (B2B commerce orgs): `describePurchaseOrderFields` → `queryPurchaseOrders` / `queryPurchaseOrderAggregate`.
 
 ### Updating products safely
 
@@ -59,6 +69,24 @@ Templates define how product data maps to a channel's requirements.
 ## Collections
 
 Collections are named product groupings (sub-catalogs): `createCollection`, `updateCollection`, `addCollectionProducts`, `removeCollectionProducts`, `queryCollectionProducts`, `getCollectionDetail`, `deleteCollection` (confirm before deleting).
+
+## App navigation (when pointing the user to the app)
+
+The app lives at `app.syndic8.io`; screens are org-scoped. When handing off, name the screen and give the path:
+
+| Screen | Path |
+|---|---|
+| Products | `/org/{orgId}/product` |
+| Collections / Catalogs | `/org/{orgId}/catalog` |
+| Media Management | `/org/{orgId}/image` |
+| Import (upload + create wizards) | `/org/{orgId}/import` |
+| Import History | `/org/{orgId}/import-history` |
+| Templates | `/org/{orgId}/template` |
+| Trading Partners | `/org/{orgId}/channel` |
+| Data Audit | `/org/{orgId}/data-audit` |
+| Verification | `/org/{orgId}/verification` |
+| Metadata Matrices | `/org/{orgId}/metadata` |
+| Reference Tables | `/org/{orgId}/freight-forwarding/reference-table` |
 
 ## Working style
 

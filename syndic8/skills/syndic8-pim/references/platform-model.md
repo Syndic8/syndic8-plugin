@@ -27,6 +27,7 @@ Product types in Syndic8 are a **fixed taxonomy defined at the platform level**.
 The message is worded per-organization, but the taxonomy itself is platform-wide — no org can add types.
 
 - **Exact strings matter.** For example, footwear is `Shoes` — sending `Footwear` is rejected even though it's semantically identical.
+- **Discover the taxonomy with `listProductTypes`** — never by trial-and-error creates.
 - **Fix it in the mapping, not the data.** When a source system uses different type names, map them to a valid Syndic8 type in the import configuration using a valid-value / convert rule. Do not ask the customer to edit their source files — the mapping is the durable fix and survives every future import.
 
 ## Import-first loading
