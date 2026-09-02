@@ -22,6 +22,19 @@ The first time Claude uses a Syndic8 tool you'll be prompted to sign in with you
 - "Run preflight for my Amazon template and summarize what's blocking"
 - "Create a collection of all products updated this week"
 - "Compare my Walmart US and Walmart CA templates"
+- "Why did my data audit grade so badly?"
+- "Which products are missing their hero image for Wayfair?"
+- "What has to be mapped in a product import, and in what order do I load files?"
+
+## What's included
+
+| Skill | Covers |
+|---|---|
+| `syndic8-pim` | The platform model, products, templates, valid values, preflight, collections, inventory/pricing/POs |
+| `syndic8-media` | Image naming, matching, tags, per-channel media readiness |
+| `syndic8-import-export` | Import flows, required mappings, SkipEmpty, verifying loads, exports, Third-Party Messages |
+| `syndic8-data-audit` | Data Audit & Verification, diagnosing bad audit scores, reference tables |
+| `syndic8-trading-partners` | Channels/destinations, marketplace connections (Amazon, Walmart, Shopify, SFTP) |
 
 ## Notes
 
