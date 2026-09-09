@@ -14,6 +14,7 @@ How product images relate to products and channels in Syndic8, and how to work w
 - An image's **tag** (often called the angle) determines which channel slot it fills at syndication. Tags are an **org-configured vocabulary** (common defaults: `Main`, `front`, `back`, `left`, `right`, `alt01`–`alt09`; some orgs use `Hero`, `Lifestyle`, `Swatch`, …). If a needed tag "can't be selected", the org's Image Tags list needs that value added — it's configuration, not a platform limit.
 - **One tag drives slot selection** — a channel slot can't require two tags at once. If a slot needs two dimensions (e.g. hero + language), use a single combined tag like `Hero_English`.
 - A channel's media slot names must **exactly equal** the tags on the media rows — a slot named for a tag no product's media carries resolves nothing.
+- **Each product SKU needs exactly ONE hero image** — a separate true/false flag on the asset, not a tag. The hero is what the product grid tile and the preflight thumbnail show. With no hero the tile is a placeholder; with several heroes the app picks one arbitrarily (back shots on tiles, preflight showing images for some rows and not others). Set it on the front/main shot only: in the Media Management side panel ("Hero Image" toggle) or via the import's HERO column (true on the main image row, false on the rest). Find products with 0 or several heroes with `queryProductMedia` filtered on `HEROFLAG Is true`, grouped by SKU.
 
 ## Filename convention (drives auto-matching)
 
