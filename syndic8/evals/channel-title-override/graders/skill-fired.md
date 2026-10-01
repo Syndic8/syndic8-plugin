@@ -1,5 +1,5 @@
 ---
 type: tool_used
 tool: Skill
-input_match: '"skill"\s*:\s*"(?:[\w-]+:)?syndic8-(content-optimization|trading-partners|pim)"'
+input_match: '"skill"\s*:\s*"(?:[\w-]+:)?syndic8-(content-optimization|trading-partners)"'
 ---

@@ -1,7 +1,7 @@
 {
   "name": "syndic8",
   "displayName": "Syndic8",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Syndic8 for Claude — product content syndication: query and update products, explore templates and field mappings, run preflight readiness checks, manage media and collections, and diagnose imports, exports, and data-audit scores through the Syndic8 MCP server.",
   "author": {
     "name": "Syndic8",
@@ -9,7 +9,7 @@
   },
   "homepage": "https://www.syndic8.io",
   "repository": "https://github.com/Syndic8/syndic8-plugin",
-  "documentationUrl": "https://github.com/Syndic8/syndic8-plugin#readme",
+  "documentationUrl": "https://www.syndic8.io/connect",
   "license": "LicenseRef-Syndic8-Proprietary",
   "privacyPolicyUrl": "https://www.syndic8.io/legal/privacy",
   "termsOfServiceUrl": "https://www.syndic8.io/terms",
