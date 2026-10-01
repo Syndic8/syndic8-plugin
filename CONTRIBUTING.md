@@ -12,7 +12,7 @@ Most content is ported from Syndic8's internal toolkit skills. When porting:
 - **No retailer numbers.** Title lengths, bullet counts and image rules are pulled live from the template and the channel guidelines, never hard-coded.
 - **One owner per fact.** If two skills would say it, one says it and the other links.
 
-`scripts/lint-customer-safe.sh` is the executable version of these rules and runs in CI on every PR; `claude plugin validate --strict` runs alongside it. A PR that fails either is not reviewed.
+`scripts/lint-customer-safe.sh` is the executable version of these rules and runs in CI on every PR; `claude plugin validate` runs alongside it (not strict: the CLI lags the portal on `icon` / `privacyPolicyUrl`). A PR that fails either is not reviewed.
 
 ## Releasing
 
