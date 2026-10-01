@@ -9,8 +9,10 @@
   },
   "homepage": "https://www.syndic8.io",
   "repository": "https://github.com/Syndic8/syndic8-plugin",
+  "documentationUrl": "https://github.com/Syndic8/syndic8-plugin#readme",
   "license": "LicenseRef-Syndic8-Proprietary",
   "privacyPolicyUrl": "https://www.syndic8.io/legal/privacy",
+  "termsOfServiceUrl": "https://www.syndic8.io/terms",
   "icon": ".claude-plugin/icon.png",
   "keywords": [
     "syndic8",
