@@ -23,5 +23,7 @@ jobs:
         with:
           node-version: 22
       - run: npm install -g @anthropic-ai/claude-code@2.1.274
-      - run: claude plugin validate ./syndic8 --strict
-      - run: claude plugin validate . --strict
+      # Not --strict: the CLI validator does not yet know the directory-required
+      # fields icon and privacyPolicyUrl and warns on them (CLI 2.1.274).
+      - run: claude plugin validate ./syndic8
+      - run: claude plugin validate .

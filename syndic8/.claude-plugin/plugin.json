@@ -1,7 +1,7 @@
 {
   "name": "syndic8",
   "displayName": "Syndic8",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Syndic8 for Claude — product content syndication: query and update products, explore templates and field mappings, run preflight readiness checks, manage media and collections, and diagnose imports, exports, and data-audit scores through the Syndic8 MCP server.",
   "author": {
     "name": "Syndic8",
@@ -9,6 +9,21 @@
   },
   "homepage": "https://www.syndic8.io",
   "repository": "https://github.com/Syndic8/syndic8-plugin",
+  "documentationUrl": "https://github.com/Syndic8/syndic8-plugin#readme",
   "license": "LicenseRef-Syndic8-Proprietary",
-  "keywords": ["syndic8", "pim", "product-content", "syndication", "ecommerce", "retail", "amazon", "walmart", "templates", "preflight"]
+  "privacyPolicyUrl": "https://www.syndic8.io/legal/privacy",
+  "termsOfServiceUrl": "https://www.syndic8.io/terms",
+  "icon": ".claude-plugin/icon.png",
+  "keywords": [
+    "syndic8",
+    "pim",
+    "product-content",
+    "syndication",
+    "ecommerce",
+    "retail",
+    "amazon",
+    "walmart",
+    "templates",
+    "preflight"
+  ]
 }
