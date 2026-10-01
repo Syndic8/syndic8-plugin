@@ -1,0 +1,5 @@
+---
+type: tool_used
+tool: Skill
+input_match: '"skill"\s*:\s*"(?:[\w-]+:)?syndic8-(pim|data-audit)"'
+---
