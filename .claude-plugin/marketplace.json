@@ -1,13 +1,15 @@
 {
   "name": "syndic8-plugin",
+  "description": "Syndic8 for Claude — work with your Syndic8 product content syndication account from Claude: products, templates, media, readiness checks, imports and exports.",
   "owner": {
-    "name": "Syndic8"
+    "name": "Syndic8",
+    "url": "https://www.syndic8.io"
   },
   "plugins": [
     {
       "name": "syndic8",
       "source": "./syndic8",
-      "description": "Work with Syndic8, the product content syndication platform, from Claude — query and update products, explore templates and field mappings, run preflight readiness checks, and manage collections, connected securely to your Syndic8 account via MCP."
+      "description": "Work with Syndic8, the product content syndication platform, from Claude — query and update products, explore templates and field mappings, run preflight readiness checks, manage media and collections, and diagnose imports, exports, and data-audit scores, connected securely to your Syndic8 account via MCP."
     }
   ]
 }

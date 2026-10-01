@@ -66,6 +66,16 @@ Templates define how product data maps to a channel's requirements.
 - Use `diagnoseField` on any flagged field to see whether the issue is the mapping, the required-config, or source-field population — fix at that layer, then re-run to green.
 - Summarize results as: ready count, blocked count, top failing fields, and suggested fixes.
 
+## Advanced: direct API access (`callApiRead` / `callApiWrite`)
+
+Two general-purpose tools call the Syndic8 REST API under the user's own permissions, for the cases a dedicated tool doesn't cover (the full template object, sub-catalog listings, org configuration). Treat them as the last resort, not the first.
+
+- **Read first, always.** `callApiRead` is safe: it is GET-only and returns the raw object. Use it to inspect before any change and to re-read after one.
+- **Path rules**: the path must include the org segment (`org/{orgId}/...`); query parameters go in the `query` argument, never in the path; paths cannot contain whitespace. Use `listOrganizations` to get the org id.
+- **Writes go through the app unless the user asks otherwise.** When `callApiWrite` is the right tool: read the object, show the user the exact fields that will change, get an explicit yes, write, then read it back and confirm the change landed. Many Syndic8 PUT routes replace the whole object — send the complete object with your edit applied, never a fragment.
+- **Never use these tools to bypass a safety step** another tool enforces (previewing a bulk update, confirming a deletion), and never call a bulk route without an explicit list of the products it applies to.
+- If a read returns an error about the route, say so and fall back to the app screen rather than guessing another path.
+
 ## Collections
 
 Collections are named product groupings (sub-catalogs): `createCollection`, `updateCollection`, `addCollectionProducts`, `removeCollectionProducts`, `queryCollectionProducts`, `getCollectionDetail`, `deleteCollection` (confirm before deleting).

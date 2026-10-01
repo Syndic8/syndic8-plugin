@@ -1,0 +1,27 @@
+name: lint
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  customer-safe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Internal-only content and directory shape checks
+        run: scripts/lint-customer-safe.sh
+      - name: Manifests are valid JSON
+        run: |
+          for f in .claude-plugin/marketplace.json syndic8/.claude-plugin/plugin.json syndic8/.mcp.json; do
+            python3 -m json.tool "$f" > /dev/null && echo "ok $f"
+          done
+  plugin-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install -g @anthropic-ai/claude-code@2.1.274
+      - run: claude plugin validate ./syndic8 --strict
+      - run: claude plugin validate . --strict
