@@ -1,7 +1,7 @@
 {
   "name": "syndic8",
   "displayName": "Syndic8",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Syndic8 for Claude — product content syndication: query and update products, explore templates and field mappings, run preflight readiness checks, manage media and collections, and diagnose imports, exports, and data-audit scores through the Syndic8 MCP server.",
   "author": {
     "name": "Syndic8",

@@ -47,20 +47,33 @@ Two things follow that regularly surprise people:
 ### Non-apparel catalogs: where does the variant axis go?
 
 The default tiers are apparel-shaped (style → colorway → size). For a catalog whose variants are
-not colors — tire sizes, capacities, lengths, voltages — you have three options, in order of
-preference:
+not colors — tire sizes, capacities, lengths, voltages — map the tiers like this:
 
-1. **Model the variant as the SKU.** The SKU tier is the variant level, whatever your variant
-   actually is. Several items sharing one SKU is the point; the per-item identifier is the UPC.
-   This is the only option that makes rollup and image matching work properly.
-2. **Put the variant label in `Color`** so it appears on the SKU tile. Pragmatic and common, but
-   it is a display convention, not a model — write it down somewhere your team will find it, or
-   someone will later "clean up" a `Color` full of tire sizes and blank every tile.
-3. **Populate `Product Group`** to get a Custom Assortment tier. Useful for an extra cut across
-   the catalog, but remember the dropdown resets, so it does not replace option 1.
+| Tier | Apparel | Non-apparel (e.g. tires) |
+|---|---|---|
+| **Style** (product name + `STYLENUMBER`) | the style | the product line (`Defender LTX M/S`) |
+| **SKU** | the colorway | **the variant** — each tire size, capacity, voltage |
+| **UPC** | the size | the sellable item; when the variant *is* the item, SKU and UPC are one-to-one, and that is correct |
 
-Putting the variant in `Size` alone is usually unsatisfying: it does not appear on the SKU tier at
-all, and size ordering is driven by a separate sort-order value, so unfamiliar values sort
+Rules that follow:
+
+1. **The SKU tier is always the variant level, whatever your variant is.** Do **not** make the
+   product line the SKU with sizes as its UPCs — that collapses every variant into one tile with
+   one label, and the sizes become invisible until the UPC tier.
+2. **One SKU per item is not a modelling error** when nothing sits between the line and the item.
+   The apparel warning against "one SKU per size" applies only where a real middle tier (a
+   colorway) exists and is being flattened.
+3. **Images**: line-level photos that apply to every size are matched once at the style level with
+   the media **Multi Match** setting on (see `syndic8-media`), so each size SKU still shows the
+   image.
+4. **Put the variant label in `Color`** so it appears on the SKU tile. It is a display convention,
+   not a model — document it at the field, or someone will later "clean up" a `Color` full of
+   tire sizes and blank every tile.
+5. **`Product Group`** adds a Custom Assortment tier for an extra analytical cut, but the dropdown
+   resets to Styles on every visit, so it does not replace rule 1.
+
+Putting the variant in `Size` alone is unsatisfying: it does not appear on the SKU tier at all,
+and size ordering is driven by a separate sort-order value, so unfamiliar values sort
 unpredictably until that is populated too.
 
 ## Product types: a fixed, platform-wide taxonomy
