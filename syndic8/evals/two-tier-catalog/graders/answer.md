@@ -2,5 +2,5 @@
 type: llm
 ---
 
-PASS if the answer says a two-tier catalog is legitimate (one SKU per item is correct when nothing sits between the line and the item), tells the user how to test whether a middle tier exists (count items sharing a name/variant pair), and mentions that the variant level is the SKU tier so image matching still works.
-FAIL if it tells the user they must force a three-tier style → SKU → UPC model, or if it invents field names not in the skill.
+PASS if the answer says: the product line is the style (product name / STYLENUMBER), each tire size is its own SKU because the SKU tier is the variant level, the UPC is the sellable item so SKU and UPC are one-to-one here and that is correct (not a modelling error); and it mentions that line-level images can be shared across the size SKUs (style-level matching with Multi Match) so image matching does not break.
+FAIL if it makes the tire line the SKU with the sizes as its UPCs, tells the user they must invent a colorway tier, or invents field names not in the skill.
