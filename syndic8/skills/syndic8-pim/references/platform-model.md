@@ -14,9 +14,54 @@ Rules that follow from this:
 
 - **Always populate `STYLENUMBER`** on every size record so sizes roll up under their style. Image auto-matching and catalog rollup both depend on it — records without a style number appear as disconnected one-offs.
 - **Images match at the SKU (color) level.** An image matched to a colorway is shared by all of that color's sizes. You do not (and should not) match images size-by-size.
-- **Do not model every size as its own SKU.** That flattens the hierarchy: rollup breaks (each size shows as an unrelated product) and image matching breaks (images no longer fan out across sizes). If a catalog looks like thousands of single-size "products", this is usually why.
+- **First check whether your catalog actually has three tiers.** The style → SKU → UPC model is
+  apparel-shaped. Some catalogs genuinely have only two levels — a tire line and its individual
+  sizes, for example, where each size is a distinct sellable item and nothing sits between them.
+  There, one SKU per item is correct, not a modelling error. Test it by counting how many items
+  share a (product name, variant) pair: if almost none do, there is no middle tier to model, and
+  forcing one creates groups of one.
+- **Where a middle tier DOES exist, do not model every size as its own SKU.** That flattens the hierarchy: rollup breaks (each size shows as an unrelated product) and image matching breaks (images no longer fan out across sizes). If a catalog looks like thousands of single-size "products", this is usually why.
 
 When diagnosing "products look duplicated" or "images only attached to some sizes", check the hierarchy first: is `STYLENUMBER` populated, and are colors (not sizes) modeled as SKUs?
+
+### The All Products grouping selector
+
+The product list has a dropdown that switches which tier you are looking at:
+
+| Option | Groups by | Shows |
+|---|---|---|
+| **Styles** | product name | one tile per style |
+| **SKUs** | SKU | one tile per colorway, labelled with its **Color** |
+| **UPCs** | the individual item | one row per item |
+| **Custom Assortment** | the product's **Product Group** field | one tile per group |
+
+Two things follow that regularly surprise people:
+
+- **The SKU tier labels each tile with `Color`.** It is the only variant attribute shown at that
+  level. If `Color` is empty, those tiles have no label — even though the grouping itself still
+  works. `Size` is only shown at the UPC tier.
+- **The grouping resets to Styles.** The selection lives in the page URL, so it is not remembered
+  between visits or shared across screens. Treat Custom Assortment as an occasional analytical
+  cut, not as a catalog's day-to-day navigation.
+
+### Non-apparel catalogs: where does the variant axis go?
+
+The default tiers are apparel-shaped (style → colorway → size). For a catalog whose variants are
+not colors — tire sizes, capacities, lengths, voltages — you have three options, in order of
+preference:
+
+1. **Model the variant as the SKU.** The SKU tier is the variant level, whatever your variant
+   actually is. Several items sharing one SKU is the point; the per-item identifier is the UPC.
+   This is the only option that makes rollup and image matching work properly.
+2. **Put the variant label in `Color`** so it appears on the SKU tile. Pragmatic and common, but
+   it is a display convention, not a model — write it down somewhere your team will find it, or
+   someone will later "clean up" a `Color` full of tire sizes and blank every tile.
+3. **Populate `Product Group`** to get a Custom Assortment tier. Useful for an extra cut across
+   the catalog, but remember the dropdown resets, so it does not replace option 1.
+
+Putting the variant in `Size` alone is usually unsatisfying: it does not appear on the SKU tier at
+all, and size ordering is driven by a separate sort-order value, so unfamiliar values sort
+unpredictably until that is populated too.
 
 ## Product types: a fixed, platform-wide taxonomy
 
