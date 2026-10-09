@@ -88,6 +88,45 @@ The message is worded per-organization, but the taxonomy itself is platform-wide
 - **Discover the taxonomy with `listProductTypes`** — never by trial-and-error creates.
 - **Fix it in the mapping, not the data.** When a source system uses different type names, map them to a valid Syndic8 type in the import configuration using a valid-value / convert rule. Do not ask the customer to edit their source files — the mapping is the durable fix and survives every future import.
 
+### Re-assigning a product's type after it is loaded
+
+A product's type **can** be changed after load — but the bulk-update call names the field
+differently from every other field, and getting it wrong fails **silently while reporting
+success**.
+
+| What you're setting | `fieldName` | What goes in `products[]` | `action` |
+|---|---|---|---|
+| An attribute (color, season, country of origin …) | the field's **uppercase internal name** | — | `Replace` |
+| The **product type** | **`productType`** (camelCase) | the **SKU** | `replace` (lowercase) |
+
+The product-type call is short — no table name, no internal-field name, no filter block:
+
+```json
+{"fieldName": "productType",
+ "fieldValue": "Shirt",
+ "products": ["25361287"],
+ "groupBy": "SKU",
+ "action": "replace",
+ "destinationId": null,
+ "replaceMatch": null}
+```
+
+⚠️ **Using the uppercase `PRODUCTTYPE` here returns a status id that polls to
+`passCount: 1, failCount: 0` — and nothing changes.** There is no error anywhere in the
+response. The same applies to capitalising `action`. If you are scripting a re-categorisation,
+confirm the result by reading the distinct values back
+(`Product Distinct Values_TYPE` via the suggestion endpoint) rather than trusting the pass
+count — and note that the product-list projection does **not** carry every field, so a field's
+absence there is not evidence it failed to save.
+
+The equivalent in the UI is **Products → select → Actions → Bulk update**, choosing
+*Product Type* as the field to update. Note the field picker is a long, virtualised list —
+type to filter rather than scrolling, or options that exist will appear to be missing.
+
+**Prefer setting the type at import** where you can. The import flow assigns it as the product
+is created, which avoids this entirely and is the only way to land a product on a type it has
+never had.
+
 ## Import-first loading
 
 Complete, fully-functional products — editable fields, media auto-matching, pricing — come from the platform's **import flows**, not from API-style creation.
