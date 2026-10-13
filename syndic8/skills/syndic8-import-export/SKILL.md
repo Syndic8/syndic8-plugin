@@ -77,6 +77,29 @@ Pricing is its own data domain and loads through a **Pricing** import flow (not 
 - For a handful of products, MCP `deactivateProducts` is simpler and reversible; use a deletion flow for bulk, file-driven removals.
 - Image deletion is handled in Media Management, not by product flows — see `syndic8-media`.
 
+## How an API load picks its import flow
+
+When a partner system posts product data to the inbound API
+(`POST /api/client/v1/products/{formatCode}/{orgName}`, and the `productfile`, `pricing`,
+`inventory` and `customer` variants), the caller never names an import flow. The platform
+chooses one:
+
+1. **`formatCode` identifies the partner-org registry**, and `orgName` is looked up inside it
+   to find the Syndic8 organization (falling back to the organization name).
+2. **The payload is stored and every JSON import flow on that organization is probed** with the
+   flow's *file match* rule — either an equality test (`!$.path=='value'`) or a JSONPath that
+   must return something. A flow with no file-match rule matches every file.
+3. **Exactly one matching flow runs that flow's template.** If none or more than one match, the
+   load runs through the generic product loader with no template, which is rarely what you
+   wanted.
+
+What this means when one organization needs more than one product import flow (for example one
+per product category): give each flow a file-match rule on a value the partner actually sends,
+such as a category field, so that any payload matches exactly one flow. If a single flow serves
+several categories instead, the product type has to be derived in that flow's template from the
+same value. In both designs the partner's job is the same: send the discriminating field, not the
+flow name.
+
 ## Re-running an import
 
 Once a flow exists, re-running needs no wizard: on the Import screen pick the flow, upload the corrected file **with the same filename** (same-name uploads overwrite in place), and trigger. Product imports upsert by UPC, so a re-run is the normal fix for a bad column; an image-flow re-run duplicates media rows (see `syndic8-media`).
