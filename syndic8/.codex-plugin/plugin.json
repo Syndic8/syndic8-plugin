@@ -1,0 +1,100 @@
+{
+  "name": "syndic8",
+  "version": "0.4.0",
+  "description": "Work with Syndic8, the product content syndication platform: query and update products, explore templates and field mappings, run preflight readiness checks, manage media and collections, and diagnose imports, exports, and data-audit scores through the Syndic8 MCP server.",
+  "author": {
+    "name": "Syndic8",
+    "email": "support@syndic8.io",
+    "url": "https://www.syndic8.io"
+  },
+  "homepage": "https://www.syndic8.io",
+  "repository": "https://github.com/Syndic8/syndic8-plugin",
+  "license": "LicenseRef-Syndic8-Proprietary",
+  "keywords": ["syndic8", "pim", "product-content", "syndication", "ecommerce", "retail", "amazon", "walmart", "templates", "preflight"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Syndic8",
+    "shortDescription": "Product content syndication",
+    "longDescription": "Connect your Syndic8 account to work with your product catalog in conversation. Query and update products, explore export templates and field mappings, run preflight readiness checks for each retail channel, manage media and collections, write convert rules, and diagnose imports, exports, and data-audit scores. Every request runs as your signed-in Syndic8 user, so you only see the organizations and data your account can access, and changes follow your Syndic8 permissions. Bulk updates are previewed before they are applied, and deletions and deactivations require your explicit confirmation. Requires an active Syndic8 account.",
+    "developerName": "Syndic8",
+    "category": "Productivity",
+    "capabilities": [
+      "Query and update products",
+      "Explore templates and field mappings",
+      "Run preflight readiness checks",
+      "Manage media and collections",
+      "Diagnose imports, exports and data audits"
+    ],
+    "websiteURL": "https://www.syndic8.io",
+    "supportURL": "https://www.syndic8.io/contact",
+    "privacyPolicyURL": "https://www.syndic8.io/legal/privacy",
+    "termsOfServiceURL": "https://www.syndic8.io/terms",
+    "defaultPrompt": [
+      "How many of my products are missing a long description?",
+      "Run preflight for my Amazon template and summarize what's blocking.",
+      "Show me the field mappings on my Walmart template."
+    ],
+    "composerIcon": "./.claude-plugin/icon.png",
+    "logo": "./.claude-plugin/icon.png"
+  },
+  "extensions": {
+    "com.openai": {
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Count products missing a field",
+              "prompt": "How many of my products are missing a long description?",
+              "tools_triggered": "listOrganizations, queryProductAggregate",
+              "expected_behavior": "Identifies the user's organization, then returns the count of products whose long description is empty, out of the total product count, without changing any data."
+            },
+            {
+              "description": "Inspect an export template's field mappings",
+              "prompt": "Show me the field mappings on my Walmart export template.",
+              "tools_triggered": "listTemplates, getFieldMappings",
+              "expected_behavior": "Finds the Walmart export template in the user's organization and lists its columns with the product field or rule each column is mapped from, flagging unmapped required columns."
+            },
+            {
+              "description": "Run a preflight readiness check",
+              "prompt": "Run preflight for my Amazon template and summarize what's blocking.",
+              "tools_triggered": "listTemplates, runPreflight",
+              "expected_behavior": "Runs preflight against the Amazon template and summarizes the blocking issues grouped by field, with how many products each affects, without modifying products."
+            },
+            {
+              "description": "Preview a bulk content update before applying it",
+              "prompt": "Shorten the product names of my five longest-named products to under 80 characters and show me the change before applying it.",
+              "tools_triggered": "queryProducts, previewBulkUpdate",
+              "expected_behavior": "Proposes shortened names for five products, shows a before/after preview, and does not apply the update unless the user confirms."
+            },
+            {
+              "description": "Read configuration no dedicated tool covers",
+              "prompt": "Which import flows are set up in my Syndic8 organization?",
+              "tools_triggered": "listOrganizations, callApiRead",
+              "expected_behavior": "Reads the organization's import flow configuration through a read-only API call and lists each flow by name with its file format, without changing anything."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Payments are out of scope",
+              "prompt": "Pay this month's Amazon seller fees from my Syndic8 account."
+            },
+            {
+              "description": "Access outside the connected account",
+              "prompt": "Show me the product catalog of a company whose Syndic8 organization I don't belong to."
+            },
+            {
+              "description": "Unrelated request",
+              "prompt": "What's the weather in Chicago tomorrow?"
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "This plugin does not sell products or process payments."
+      },
+      "publication": {
+        "release_notes": "Initial release: products, templates and field mappings, preflight readiness, media and collections, imports and exports, and data-audit diagnosis for Syndic8 accounts."
+      }
+    }
+  }
+}

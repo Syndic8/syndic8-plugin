@@ -1,6 +1,6 @@
-# Syndic8 for Claude
+# Syndic8 for Claude and ChatGPT
 
-Work with Syndic8 — the product content syndication platform — directly from Claude (claude.ai, Claude Desktop/Cowork, and Claude Code): query and update products, explore templates and field mappings, run preflight readiness checks, manage media and collections, and diagnose imports, exports, and data-audit scores — connected securely to your own Syndic8 account.
+Work with Syndic8 — the product content syndication platform — directly from Claude (claude.ai, Claude Desktop/Cowork, and Claude Code) or ChatGPT and Codex: query and update products, explore templates and field mappings, run preflight readiness checks, manage media and collections, and diagnose imports, exports, and data-audit scores — connected securely to your own Syndic8 account.
 
 ## Install
 
@@ -13,7 +13,9 @@ Work with Syndic8 — the product content syndication platform — directly from
 /plugin install syndic8@syndic8-plugin
 ```
 
-The first time Claude uses a Syndic8 tool you'll be prompted to sign in with your Syndic8 credentials (OAuth). Claude only sees the organizations and data your Syndic8 user can access, and every action runs under your Syndic8 permissions.
+**In ChatGPT or Codex:** open the plugin directory, find **Syndic8**, install it, and connect your Syndic8 account when prompted.
+
+The first time Claude or ChatGPT uses a Syndic8 tool you'll be prompted to sign in with your Syndic8 credentials (OAuth). Claude only sees the organizations and data your Syndic8 user can access, and every action runs under your Syndic8 permissions.
 
 **Access:** you need an active Syndic8 account. If you don't have one, contact sales@syndic8.io.
 
@@ -44,6 +46,7 @@ The first time Claude uses a Syndic8 tool you'll be prompted to sign in with you
 
 ## Data handling
 
+- The same plugin folder serves both platforms: `.claude-plugin/plugin.json` for Claude, `.codex-plugin/plugin.json` for ChatGPT and Codex, sharing one `.mcp.json` and one set of skills.
 - The plugin bundles one remote MCP server, `https://mcp.syndic8.io/mcp`, operated by Syndic8. It is the only destination the plugin sends data to.
 - Requests carry your Syndic8 OAuth session and the product, template, media, pricing, and order data you ask Claude to read or change. Nothing is sent anywhere else, and the plugin stores no credentials.
 - Product changes made through Claude follow your Syndic8 permissions; bulk updates are always previewed before they're applied, and deletions and deactivations require your explicit confirmation.

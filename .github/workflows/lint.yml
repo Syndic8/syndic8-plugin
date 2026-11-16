@@ -12,9 +12,23 @@ jobs:
         run: scripts/lint-customer-safe.sh
       - name: Manifests are valid JSON
         run: |
-          for f in .claude-plugin/marketplace.json syndic8/.claude-plugin/plugin.json syndic8/.mcp.json; do
+          for f in .claude-plugin/marketplace.json syndic8/.claude-plugin/plugin.json syndic8/.codex-plugin/plugin.json syndic8/.mcp.json; do
             python3 -m json.tool "$f" > /dev/null && echo "ok $f"
           done
+  openai-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: OpenAI manifest agrees with the Claude manifest and the directory limits
+        run: scripts/check-openai-manifest.py
+      # No upload API exists: download this artifact and upload it at platform.openai.com/plugins.
+      - name: Build the OpenAI plugin ZIP
+        id: zip
+        run: echo "path=$(scripts/build-openai-zip.sh)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: syndic8-openai-plugin
+          path: ${{ steps.zip.outputs.path }}
   plugin-validate:
     runs-on: ubuntu-latest
     steps:
